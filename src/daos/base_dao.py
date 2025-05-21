@@ -18,16 +18,17 @@ class BaseDAO(Generic[T]):
 
     @classmethod
     async def add(cls, session: AsyncSession, model: BaseModel) -> int:
+        request = cls.model(**model.model_dump())
         try:
-            session.add(model)
+            session.add(request)
             await session.commit()
-            await session.refresh(model)
+            await session.refresh(request)
         except SQLAlchemyError as e:
             await session.rollback()
             err = str(e)
             raise err
 
-        return model.id
+        return request.id
 
     @classmethod
     async def get_all(cls, session: AsyncSession):
@@ -50,12 +51,13 @@ class BaseDAO(Generic[T]):
             raise err
 
     @classmethod
-    async def delete(cls, session: AsyncSession, item_id: int) -> None:
+    async def delete(cls, session: AsyncSession, item_id: int) -> bool:
         try:
             query = session.get(cls.model, item_id)
             await session.delete(query)
             await session.commit()
             await session.refresh(query)
+            return True
         except SQLAlchemyError as e:
             await session.rollback()
             err = str(e)
