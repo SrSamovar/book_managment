@@ -20,7 +20,7 @@ class Book(Base):
 
     author: Mapped['Author'] = relationship('Author', back_populates='books')
 
-
+    @property
     def info(self):
         return {
             'id': self.id,

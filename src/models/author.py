@@ -14,10 +14,14 @@ class Author(Base):
 
     name: Mapped[str] = mapped_column(String, unique=True, nullable=False)
     birth_date: Mapped[date] = mapped_column(Date)
-    age: Mapped[int] = mapped_column(Integer, nullable=False)
+    age: Mapped[int] = mapped_column(Integer, nullable=True)
 
-    books: Mapped[list['Book']] = relationship('Book', back_populates='author')
+    books: Mapped[list['Book']] = relationship('Book',
+                                               back_populates='author',
+                                               cascade='all, delete-orphan'
+                                               )
 
+    @property
     def info(self):
         return {
             'id': self.id,

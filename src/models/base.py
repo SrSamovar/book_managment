@@ -2,7 +2,7 @@ from datetime import datetime
 
 from sqlalchemy import Integer, DateTime, func
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
-from sqlalchemy.ext.asyncio import AsyncAttrs, async_sessionmaker, create_async_engine
+from sqlalchemy.ext.asyncio import AsyncAttrs, async_sessionmaker, create_async_engine, AsyncSession
 
 from ..core.config_db import settings
 
@@ -11,7 +11,9 @@ DATABASE_URL = settings.get_db_url()
 
 engine = create_async_engine(url=DATABASE_URL)
 
-async_session_maker = async_sessionmaker(engine, expire_on_commit=False)
+async_session_maker = async_sessionmaker(engine,
+                                         expire_on_commit=False,
+                                         class_=AsyncSession)
 
 
 class Base(DeclarativeBase, AsyncAttrs):
@@ -28,7 +30,7 @@ class Base(DeclarativeBase, AsyncAttrs):
 
 
 async def init_orm():
-    with engine.begin() as conn:
+    async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
 
 
