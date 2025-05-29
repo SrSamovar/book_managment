@@ -25,7 +25,7 @@ class AuthorService(BaseService):
     async def delete_author(self, session: AsyncSession, author_id: int):
         return await self.delete_item(session, author_id)
 
-    async def patch_author(self, session: AsyncSession,
+    async def update_author(self, session: AsyncSession,
                            author_id: int,
                            request: AuthorUpdateRequest):
         return await self.patch_item(session, author_id, request)

@@ -39,7 +39,7 @@ class BaseService:
         results = await self.dao.get_all(session)
 
         if results is None:
-            raise HTTPException(status_code=404, detail='Teacher not found')
+            raise HTTPException(status_code=404, detail='Item  not found')
 
         return results
 
@@ -54,7 +54,7 @@ class BaseService:
         result = await self.dao.get_by_id(session, item_id)
 
         if result is None:
-            raise HTTPException(status_code=404, detail='Teacher not found')
+            raise HTTPException(status_code=404, detail='Item not found')
 
         return result
 
@@ -68,8 +68,8 @@ class BaseService:
         """
         result = await self.dao.delete(session, item_id)
 
-        if result is Exception:
-            raise HTTPException(status_code=404, detail='Teacher not found')
+        if result is None:
+            raise HTTPException(status_code=404, detail='Item not found')
 
         return result
 
@@ -87,7 +87,7 @@ class BaseService:
         result = await self.dao.patch(session, item_id, item_data)
 
         if result is Exception:
-            raise HTTPException(status_code=404, detail='Teacher not found')
+            raise HTTPException(status_code=404, detail='Item not found')
 
         if result is None:
             raise HTTPException(status_code=400, detail='Enter the updated data')
