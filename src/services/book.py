@@ -28,7 +28,7 @@ class BookService(BaseService):
                           book_id: int):
         return await self.delete_item(session, book_id)
 
-    async def patch_book(self, session: AsyncSession,
+    async def update_book(self, session: AsyncSession,
                          book_id: int,
                          request: BookUpdateRequest):
         return await self.patch_item(session, book_id, request)
